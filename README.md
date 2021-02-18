@@ -1,57 +1,21 @@
-#  ADDING GENDER VARIABLE TO DATASET
+#  USING SUPERVISED MACHINE LEARNING (cross-validation framework) TO PREDICT PREPRINTS' PUBLICATION STATUS
 
-##  CORD__pp_gender_abstract.py (master_ script)
+* As part of my dissertation I developed an innovative record-linkage program to match preprint records to their final published, peer-reviewed counterparts. The extensive diagnostic test I perform reveals a F1-score of 0.86, which is the highest F-1 score ever recorded for an algorythm trying to match preprints with their peer-reviewed counterparts. That said, the main approach I developed as part of my PhD dissertation rely on a rule-based approach and not machine-learning. Using rule-based methods such as fuzzy matching is not problem in itself, but it is extremely cumbersome to maintain and optimize since the sensitivity analysis need to be performed manually. Machine-learning approaches on the other hand simplify both code optimization and performance analysis. Therefore, in addition to the main method I developed in my PhD, I am also currently building a logistic regression as a supervised machine learning model within a cross-validation framework.
 
-* This py_script can create gender variables using human names. This script is abstracted enough to accomodate any column in a csv that contain lists of human names. In 2020 alone, I used this script to predict gender on more than 700, 000 first names. The master script accomplish the following task:
+##  FEATURE ENGINEERING
 
-1. PARSE ALL LAST NAME FROM LIST OF AUTHORS (see get_au_last_name.py)
+1. create thousands of independent variables to predict COVID-19 preprints' publication status (see ML_string_feature_engineering_abstract_temp.py)
 
-* from: Harvey, Raymond A.; Rassen, Jeremy A.; Kabelac, Carly A.; Turenne, Wendy
-* to: ['Harvey', 'Rassen', 'Kabelac', 'Turenne']
+* keywords approach - one-hot encoding
+* gender
+* institutional affiliations
+* country
+* university ranking
+* etc.
 
-2. PARSE ALL FIRST NAME FROM LIST OF AUTHORS (see GENDER_get_first_name_cur.py)
+2. Optimization of Logistic Regression's Hyperparameters (see cross__validation__v3.py)
 
-* from: Harvey, Raymond A.; Rassen, Jeremy A.; Kabelac, Carly A.; Turenne, Wendy
-* to: ['Raymond', 'Jeremy', 'Carly', 'Wendy']
+3. Machine-Learning (see CORD_PP_ML_v2.py)
 
-3. ASSIGN UNIQUE ID TO LAST NAME (see GENDER_assign_last_name_id.py)
-
-* from: ['Harvey', 'Rassen', 'Kabelac', 'Turenne']
-* to: [[1788, 'harvey'], [90250, 'rassen'], [104105, 'kabelac'], [104106, 'turenne']]
-
-4. ASSIGN UNIQUE ID TO FIRST NAME (see GENDER_assign_first_name_id.py)
-
-* from: ['Raymond', 'Jeremy', 'Carly', 'Wendy']
-* to: [[3894, 'raymond'], [2099, 'jeremy'], [8961, 'carly'], [4990, 'wendy']]
-
-5. ADD DUMMY VARIABLES FOR ANALYSIS (see WOS_GENDER_add_two_flags.py)
-
-7. QUERY NAMSOR API TO GET GENDER DATA (see WOS_GENDER_namesor_api.py)
-
-    subarna khatry return ==>
-
-    {'first_name': 'subarna',
-     'gender_scale': 0.9606992177969973,
-     'id': None,
-     'last_name': 'khatry',
-     'likely_gender': 'female',
-     'probability_calibrated': 0.9803496088984986,
-     'score': 20.156151371724143}
-
-8. POST-API QUERY - ADD GENDER VARIABLES TO TARGET DATASET (see GENDER_add_gender_variables.py)
-
-* from: [[3894, 'raymond'], [2099, 'jeremy'], [8961, 'carly'], [4990, 'wendy']]
-* to: [[3894, 'raymond', 'male'], [2099, 'jeremy', 'male'], [8961, 'carly', 'female'], [4990, 'wendy', 'female']]
-
-* this script also add a number of key gender dummy variables: first_au_female_1 (is the first author female); last_au_female_1 (is the last author female), etc..
-
-9. DETERMINATION OF GENDER ABOVE or BELOW CUT-OFF POINT (see GENDER_add_prop_dummy_cut_off.py)
-
-* from: [[3894, 'raymond', 'male'], [2099, 'jeremy', 'male'], [8961, 'carly', 'female'], [4990, 'wendy', 'female']]
-* to: [[3894, 'raymond', 'male', 0.995278343], [2099, 'jeremy', 'male', 0.99353481], [8961, 'carly', 'female', 0.910756111], [4990, 'wendy', 'female', 0.973693259]]
-
-* flag_first_below (is the gender prediction probability for the first author 'raymond' above the cut-off point of 0.73, if yes, True; else False
-* flag_last_below (is the gender prediction probability for the last author 'wendy' above the cut-off point of 0.73, if yes, True; else False
-* etc...
-
-10. EXAMPLE OF FINAL CORD-19 DATASET with FULL GENDER VARIABLES (see CORD_pp_to_pr_api_v74_training_set_all_nih_ror.csv)
+* Running Logistic Regression within a cross-validation framework
+* Saving Model to be able to run it on the out-of-sample dataset
