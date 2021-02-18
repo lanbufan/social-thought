@@ -1,31 +1,26 @@
-#  CORD-19 Preprint Project
+#  ADDING GENDER VARIABLE TO DATASET
 
-## Data Cleaning Procedure
+##  CORD__pp_gender_abstract.py (master_ script)
 
-### "CORD_PP_TO_PR_script_execution_master_data_cleaning.py" (master script)
+* This py_script can create gender variables using human names. This script is abstracted enough to accomodate any column in a csv that contain lists of human names. In 2020 alone, I used this script to predict gender on more than 700, 000 first names. The master script accomplish the following task:
 
-* This py_script clean the raw version of CORD-19 csv and render it in a clear format usable for the record-linkage of COVID-19 preprints with their final published versions. This master script execute the following tasks:
+1. PARSE ALL LAST NAME FROM LIST OF AUTHORS (see get_au_last_name.py)
 
-1. REMOVE publications without article title (see in master script)
+* from: Harvey, Raymond A.; Rassen, Jeremy A.; Kabelac, Carly A.; Turenne, Wendy
+* to: ['Harvey', 'Rassen', 'Kabelac', 'Turenne']
 
-2. REMOVE publications published before 2019 (see CORD_filter_year_vx.py)
+2. PARSE ALL FIRST NAME FROM LIST OF AUTHORS (see GENDER_get_first_name_cur.py)
 
-3. REMOVE non-COVID-19 publications using a set of keywords (see CORD_filter_covid_kw_vx.py)
+* from: Harvey, Raymond A.; Rassen, Jeremy A.; Kabelac, Carly A.; Turenne, Wendy
+* to: ['Raymond', 'Jeremy', 'Carly', 'Wendy']
 
-4. REMOVE publications that are not articles (see in master script)
+3. ASSIGN UNIQUE ID TO LAST NAME (see GENDER_assign_last_name_id.py)
 
-5. IDENTIFY PREPRINTS in the corpus of COVID-19 publications (see CORD_adhoc_pp_identification.py)
+* from: ['Harvey', 'Rassen', 'Kabelac', 'Turenne']
+* to: [[1788, 'harvey'], [90250, 'rassen'], [104105, 'kabelac'], [104106, 'turenne']]
 
-7. REPAIR WHO METADATA (see CORD_pp_coverage_nih_abstract.py)
+4. ASSIGN UNIQUE ID TO FIRST NAME (see GENDER_assign_first_name_id.py)
 
-8. ADD PREPRINTS from NIH iSearch dataset
+* from: ['Raymond', 'Jeremy', 'Carly', 'Wendy']
+* to: [[3894, 'raymond'], [2099, 'jeremy'], [8961, 'carly'], [4990, 'wendy']]
 
-9. REMOVE DUPLICATES (see CORD_filter_duplicate_cur.py)
-
-10. REMOVE non-english language publications (see CORD_filter_lang_vx.py)
-
-11. FIX ARXIV_ID (see CORD_fix_arxiv_id.py)
-
-12. REMOVE PREPRINTS from other sources(see in master script)
-
-13. CREATE FINAL CORD-19 CSV(see in master script)
